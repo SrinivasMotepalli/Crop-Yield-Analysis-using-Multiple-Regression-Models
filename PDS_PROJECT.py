@@ -1,10 +1,27 @@
 import streamlit as st
 import pandas as pd
-import pickle
+from sklearn.linear_model import LinearRegression
 
-with open("gpr_model.pkl", 'rb') as model_file:
-    model = pickle.load(model_file)
-    
+df = pd.read_csv(r"C:\Users\srini\Desktop\crop_yield_dataset.csv")
+
+# Select relevant features and target
+features = ['Crop', 'Rainfall', 'Area', 'Fertilizer_Name', 'Fertilizer_Used', 'Humidity', 'Temperature']
+target = 'Produce'
+
+# Filter the DataFrame
+data = df[features + [target]]
+
+# Convert categorical features to numerical using one-hot encoding
+data = pd.get_dummies(data)
+
+# Separate features and target
+X = data.drop(target, axis=1)
+y = data[target]
+
+# Create and train a Random Forest Regressor on the entire dataset
+model = LinearRegression()
+model.fit(X, y)
+
 # Streamlit app
 st.title('Crop Produce Prediction')
 
@@ -27,7 +44,7 @@ input_data = pd.DataFrame([[crop_name, rainfall, area, fertilizer_name, fertiliz
 input_data = pd.get_dummies(input_data)
 
 # Align the columns of input_data with the columns of X
-input_data = input_data.reindex(columns=['Rainfall', 'Area', 'Fertilizer_Used', 'Humidity', 'Temperature', 'Crop_Cotton', 'Crop_Maize', 'Crop_Rice', 'Crop_Wheat', 'Fertilizer_Name_DAP', 'Fertilizer_Name_NPK', 'Fertilizer_Name_Potash', 'Fertilizer_Name_Urea'], fill_value=0)
+input_data = input_data.reindex(columns=X.columns, fill_value=0)
 
 # Make a prediction
 predicted_produce = model.predict(input_data)
@@ -35,3 +52,4 @@ predicted_produce = model.predict(input_data)
 # Display the prediction
 st.subheader('Predicted Produce:')
 st.write(predicted_produce[0])
+
