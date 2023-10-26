@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 from sklearn.linear_model import LinearRegression
 
-df = pd.read_csv(r"C:\Users\srini\Desktop\crop_yield_dataset.csv")
+df = pd.read_csv("crop_yield_dataset.csv")
 
 # Select relevant features and target
 features = ['Crop', 'Rainfall', 'Area', 'Fertilizer_Name', 'Fertilizer_Used', 'Humidity', 'Temperature']
