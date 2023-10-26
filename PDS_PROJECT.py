@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import pickle
 
-with open(r"C:\Users\srini\Desktop\gpr_model.pkl", 'rb') as model_file:
+with open("gpr_model.pkl", 'rb') as model_file:
     model = pickle.load(model_file)
     
 # Streamlit app
